@@ -13,6 +13,7 @@ import { NAV_LINKS } from "@/lib/data";
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { IconHome, IconMoon, IconSun } from "@tabler/icons-react";
+import { IconBrandGithub } from "@tabler/icons-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useTheme } from "next-themes";
@@ -124,6 +125,37 @@ export default function MobileNavBar() {
                 )}
               </AnimatePresence>
             </Button>
+
+            <Button
+              asChild
+              size="sm"
+              variant="outline"
+              className="h-8 rounded-full px-2.5"
+            >
+              <Link
+                href="https://github.com/LokeshXs/My-Portfolio--Lokesh-Singh"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Star on <IconBrandGithub stroke={2} />
+              </Link>
+            </Button>
+
+            <Link
+              href="https://buymeacoffee.com/lokesh1129m"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Buy me a coffee"
+              className="shrink-0"
+            >
+              <Image
+                alt=""
+                width={36}
+                height={36}
+                src="/buy_me_coffee.png"
+                className="rotate-6 object-contain transition-transform duration-300 hover:rotate-0"
+              />
+            </Link>
 
             <MobileNavToggleButton />
           </motion.ul>

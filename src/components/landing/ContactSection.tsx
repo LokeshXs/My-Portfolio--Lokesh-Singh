@@ -1,58 +1,76 @@
-"use client";
-import { useState } from "react";
-import AnimatedSubheading from "../common/AnimatedSubHeading";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { cn } from "@/lib/utils";
+import {
+  IconBrandLinkedin,
+  IconBrandGithub,
+  IconBrandX,
+  IconCalendarEvent,
+  IconMail,
+} from "@tabler/icons-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { SOCIALS } from "@/lib/data";
+import AnimatedSubheading from "../common/AnimatedSubHeading";
+
+const EMAIL_ADDRESS = "hi@lokeshbuilds.in";
+const SCHEDULE_CALL_URL = "https://cal.com/lokesh1129/meeting";
+const X_URL = "https://x.com/ShipItLokesh";
+const githubSocial = SOCIALS.find((social) => social.name === "Github");
+
+const contactLinks = [
+  {
+    label: "Follow me on X",
+    href: X_URL,
+    icon: IconBrandX,
+    external: true,
+  },
+  {
+    label: "View my GitHub profile",
+    href: githubSocial?.href ?? "https://github.com/LokeshXs",
+    icon: githubSocial?.icon ?? IconBrandGithub,
+    external: true,
+  },
+  {
+    label: "Connect on LinkedIn",
+    href: "https://www.linkedin.com/in/lokeshsingh1129",
+    icon: IconBrandLinkedin,
+    external: true,
+  },
+  {
+    label: `Email ${EMAIL_ADDRESS}`,
+    href: `mailto:${EMAIL_ADDRESS}`,
+    icon: IconMail,
+    external: false,
+  },
+  {
+    label: "Schedule a call",
+    href: SCHEDULE_CALL_URL,
+    icon: IconCalendarEvent,
+    external: true,
+  },
+];
 
 export default function ContactSection() {
-  const [value, setValue] = useState("");
-  const router = useRouter();
-
-  const onSubmit = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(value)) {
-      toast.warning("Invalid Email!");
-      return;
-    }
-
-    router.push(`mailto:${value}`);
-  };
-
   return (
     <div className="px-4 py-8 max-sm:px-2 max-sm:py-6">
       <div className="flex justify-center">
-        <AnimatedSubheading subheading="Get in touch" />
+        <AnimatedSubheading subheading="Connect with me ❤️" />
       </div>
 
-      <div className="flex flex-col items-center py-6">
-        <p className="text-secondary max-w-xl text-center max-sm:text-sm">
-          I&apos;m currently looking for new opportunities. Whether you have a
-          question or want to say hi, hit that button.
-        </p>
+      <div className="flex items-center justify-center gap-8 mt-12">
+        {contactLinks.map(({ label, href, icon: Icon, external }) => (
+          <Link
+            key={label}
+            href={href}
+            aria-label={label}
+            title={label}
+            target={external ? "_blank" : undefined}
+            rel={external ? "noopener noreferrer" : undefined}
+         
+          >
+          <div className="text-muted-foreground hover:text-primary-foreground shrink-0 rounded-md border  bg-muted p-2 transition-all duration-300">
 
-        <div
-          className={cn(
-            "border-border focus-within:ring-ring shadow-custom mt-4 flex w-lg rounded-lg border p-1 ring-1 ring-transparent max-sm:w-full",
-          )}
-        >
-          <Input
-            className="flex-1 border-0 shadow-none focus-visible:ring-0 max-sm:text-sm"
-            placeholder="Your email"
-            type="email"
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-          />
-          <Button onClick={onSubmit} variant="secondary">
-            Send Enquiry
-          </Button>
-        </div>
+            <Icon className="size-6" aria-hidden="true"  />
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );

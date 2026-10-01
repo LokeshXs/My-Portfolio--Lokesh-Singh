@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@animateicons/react": "^0.5.0",
     "@hookform/resolvers": "^5.2.2",
     "@octokit/rest": "^22.0.0",
     "@radix-ui/react-label": "^2.1.7",

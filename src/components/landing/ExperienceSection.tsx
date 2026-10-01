@@ -8,12 +8,13 @@ import {
   IconCode,
 } from "@tabler/icons-react";
 import TechStackBadge from "../common/TechStackBadge";
+import { cn } from "@/lib/utils";
 
 export default function ExperienceSection() {
   return (
     <div className="px-4 max-sm:px-2 py-8 max-sm:py-6">
       <div className="flex justify-center">
-        <AnimatedSubheading subheading="Worked at reputed firms" />
+        <AnimatedSubheading subheading="Work Experiences" />
       </div>
 
       <div className="space-y-8 py-6">
@@ -29,7 +30,7 @@ export default function ExperienceSection() {
                     </div>
                   )}
                 </div>
-                <div>
+                <div className={cn("rounded-md bg-muted p-1", exp.logoContainerClassName)}>
                   <Image
                     src={exp.companyLogoPath}
                     alt={exp.companyName}
@@ -67,7 +68,7 @@ export default function ExperienceSection() {
                   ))}
                 </ul>
               </div>
-              <div className="flex justify-start pl-1">
+              {/* <div className="flex justify-start pl-1">
                 {exp.tech.map((tech, index) => (
                   <TechStackBadge
                     key={`tech-${idx}-${index}`}
@@ -77,7 +78,7 @@ export default function ExperienceSection() {
                     translateValue={index * 4}
                   />
                 ))}
-              </div>
+              </div> */}
             </div>
           </div>
         ))}

@@ -1,15 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { MobileNavContext } from "@/context/MobileNavContextProvider";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button";
 import AnimatedHamburgerButton from "./ui/MobileNavToggleButton";
 import { NAV_LINKS } from "@/lib/data";
+import {
+  FolderOpenIcon,
+  type FolderOpenIconHandle,
+  UserRoundIcon,
+  type UserRoundIconHandle,
+} from "@animateicons/react/lucide";
 
 const MobileNavPanel = () => {
   const { isOpen, setOpen } = useContext(MobileNavContext);
+  const aboutIconRef = useRef<UserRoundIconHandle>(null);
+  const projectsIconRef = useRef<FolderOpenIconHandle>(null);
 
   return (
     <AnimatePresence>
@@ -53,7 +61,41 @@ const MobileNavPanel = () => {
                     },
                   }}
                 >
-                  <Link href={navLink.href}>{navLink.title}</Link>
+                  <Link
+                    href={navLink.href}
+                    className="inline-flex items-center justify-center gap-2"
+                    onMouseEnter={() => {
+                      if (navLink.title === "About") {
+                        aboutIconRef.current?.startAnimation();
+                      } else {
+                        projectsIconRef.current?.startAnimation();
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      if (navLink.title === "About") {
+                        aboutIconRef.current?.stopAnimation();
+                      } else {
+                        projectsIconRef.current?.stopAnimation();
+                      }
+                    }}
+                  >
+                    {navLink.title === "About" ? (
+                      <UserRoundIcon
+                        ref={aboutIconRef}
+                        size={20}
+                        isAnimated={false}
+                        className="shrink-0"
+                      />
+                    ) : (
+                      <FolderOpenIcon
+                        ref={projectsIconRef}
+                        size={20}
+                        isAnimated={false}
+                        className="shrink-0"
+                      />
+                    )}
+                    {navLink.title}
+                  </Link>
                 </motion.li>
               ))}
             </motion.ul>

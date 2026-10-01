@@ -1,10 +1,12 @@
-import { IconBrandGithub, IconBrandLinkedin, IconBrandX } from "@tabler/icons-react";
+import {
+  IconBrandGithub,
+  IconBrandLinkedin,
+  IconBrandX,
+} from "@tabler/icons-react";
 
-
-export const NAME="Lokesh Singh 👋"
-export const DESCRIPTION="I’m a software engineer specializing in building modern, scalable, and user-friendly web applications. I love turning ideas into functional products — from designing sleek interfaces with React/Next.js to architecting robust backends with Node.js and databases like PostgreSQL."
-
-
+export const NAME = "Lokesh Singh 👋";
+export const DESCRIPTION =
+  "I’m an AI Design Engineer crafting thoughtful user experiences by combining design expertise with the power of AI tools.";
 
 export const NAV_LINKS = [
   {
@@ -15,78 +17,97 @@ export const NAV_LINKS = [
     title: "Projects",
     href: "/projects",
   },
-  {
-    title: "Contact",
-    href: "/contact",
-  },
-  {
-    title: "Blog",
-    href: "/blogs",
-  },
 ];
-
-
 
 export const PROJECTS = [
   {
-    title: "Landing Page",
-    src: "/projects/project1.webp",
-    href: "#",
+    title: "Xenith",
+    src: "/projects/growwithxenith.com.png",
+    href: "https://growwithxenith.com",
     description:
-      "Here’s a clean and modern hero section for a renewable energy website 🌿 Focused on solar panel solutions for smarter and more efficient buildings — designed to balance bold typography, strong visuals, and accessible CTAs.",
-    tech: [
-      {
-        name: "React",
-        icon: "/icons/react.svg",
-        width: 66,
-      },
-      {
-        name: "Next.js",
-        icon: "/icons/next-js.svg",
-        width: 68,
-      },
-      {
-        name: "Tailwind",
-        icon: "/icons/tailwind.svg",
-        width: 76,
-      },
-    ],
-  },
-  {
-    title: "Landing Page",
-    src: "/projects/project2.webp",
-    href: "#",
-    description:
-      "Here’s a clean and modern hero section for a renewable energy website 🌿 Focused on solar panel solutions for smarter and more efficient buildings — designed to balance bold typography, strong visuals, and accessible CTAs.",
+      "Xenith is an AI-powered growth platform for X that helps creators and founders show up consistently. It analyzes niche trends and creator content, learns your voice, and turns those insights into original post drafts and replies. Users can review and edit content, compare predicted engagement, schedule posts, and join relevant conversations from one workflow.",
     tech: [
       {
         name: "Next.js",
         icon: "/icons/next-js.svg",
-        width: 68,
-      },
-      {
-        name: "Golang",
-        icon: "/icons/golang-1.svg",
         width: 70,
+      },
+      {
+        name: "Supabase",
+        icon: "/icons/supabase.svg",
+        width: 90,
       },
       {
         name: "PostgreSQL",
         icon: "/icons/postgresql.svg",
-        width: 96,
+        width: 98,
       },
     ],
   },
   {
-    title: "Landing Page",
-    src: "/projects/project3.webp",
-    href: "#",
+    title: "Indie Hackers City",
+    src: "/projects/indiehackers.city.png",
+    href: "https://indiehackers.city",
     description:
-      "Here’s a clean and modern hero section for a renewable energy website 🌿 Focused on solar panel solutions for smarter and more efficient buildings — designed to balance bold typography, strong visuals, and accessible CTAs.",
+      "Indie Hackers City helps independent founders discover and connect with builders in the city. Explore what other makers are working on, share your own profile and projects.",
     tech: [
       {
         name: "Next.js",
         icon: "/icons/next-js.svg",
-        width: 68,
+        width: 70,
+      },
+      {
+        name: "Supabase",
+        icon: "/icons/supabase.svg",
+        width: 90,
+      },
+      {
+        name: "Three.js",
+        icon: "/icons/three.js.svg",
+        width: 80,
+      },
+      {
+        name: "PostgreSQL",
+        icon: "/icons/postgresql.svg",
+        width: 98,
+      },
+    ],
+  },
+  {
+    title: "Urlbit",
+    src: "/projects/urlbit.space.png",
+    href: "https://urlbit.space/",
+    description:
+      "URLBit is a fast, secure, and user-friendly URL shortener designed to help users create, manage, and track shortened links effortlessly. Built with a focus on performance and simplicity, it provides analytics for every shortened link — including total clicks and timestamps",
+    tech: [
+      {
+        name: "Next.js",
+        icon: "/icons/next-js.svg",
+        width: 70,
+      },
+      {
+        name: "Golang",
+        icon: "/icons/golang-1.svg",
+        width: 72,
+      },
+      {
+        name: "PostgreSQL",
+        icon: "/icons/postgresql.svg",
+        width: 98,
+      },
+    ],
+  },
+  {
+    title: "1BeatClub",
+    src: "/projects/1beatclub.in.png",
+    href: "https://1beatclub.in",
+    description:
+      "1BeatClub is a social music platform where friends create shared clubs for parties, road trips, workouts, and everyday hangouts. Members add tracks, vote for their favorites, and shape the playlist together in real time. Invite links and QR codes make it easy to bring everyone into the club.",
+    tech: [
+      {
+        name: "Next.js",
+        icon: "/icons/next-js.svg",
+        width: 70,
       },
       {
         name: "Node.js",
@@ -96,154 +117,49 @@ export const PROJECTS = [
       {
         name: "PostgreSQL",
         icon: "/icons/postgresql.svg",
-        width: 96,
-      },
-    ],
-  },
-  {
-    title: "Landing Page",
-    src: "/projects/project4.webp",
-    href: "#",
-    description:
-      "Here’s a clean and modern hero section for a renewable energy website 🌿 Focused on solar panel solutions for smarter and more efficient buildings — designed to balance bold typography, strong visuals, and accessible CTAs.",
-    tech: [
-      {
-        name: "Vite",
-        icon: "/icons/vitejs.svg",
-        width: 54,
-      },
-      {
-        name: "Python",
-        icon: "/icons/python-5.svg",
-        width: 74,
-      },
-      {
-        name: "PostgreSQL",
-        icon: "/icons/postgresql.svg",
-        width: 96,
+        width: 98,
       },
     ],
   },
 ];
 
-export const EXPERIENCE = [
+type Experience = {
+  companyName: string;
+  companyLogoPath: string;
+  logoContainerClassName?: string;
+  designation: string;
+  jobType: string;
+  jobLocation: string;
+  period: string;
+  expPoints: string[];
+};
+
+export const EXPERIENCE: Experience[] = [
   {
-    companyName: "Microsoft",
-    companyLogoPath: "/experience/microsoft.svg",
-    designation: "Senior Frontend Engineer",
+    companyName: "PharmaEdge",
+    companyLogoPath: "/experience/pharmaedge.png",
+    logoContainerClassName: "bg-neutral-800",
+    designation: "Design Engineer",
     jobType: "Full Time",
-    jobLocation: "Banglore, India",
-    period: "Jan 2022 - Present",
+    jobLocation: "Hybrid",
+    period: "Mar 2026 – Current",
     expPoints: [
-      "Built and maintained responsive web applications using React.js, Next.js, and Tailwind CSS, improving page performance by 30%.",
-      "Collaborated with UI/UX team to implement pixel-perfect designs and deliver smooth, user-friendly interfaces.",
-      "Integrated REST APIs and GraphQL endpoints, optimizing data fetching with React Query and caching strategies.",
-    ],
-      tech: [
-      {
-        name: "Vite",
-        icon: "/icons/vitejs.svg",
-        width: 54,
-      },
-      {
-        name: "Python",
-        icon: "/icons/python-5.svg",
-        width: 74,
-      },
-      {
-        name: "PostgreSQL",
-        icon: "/icons/postgresql.svg",
-        width: 96,
-      },
+      "Working to design and create modern looking and exceptional User Experience pharma softwares",
     ],
   },
   {
-    companyName: "Netflix",
-    companyLogoPath: "/experience/netflix.svg",
-    designation: "Frontend Engineer",
+    companyName: "HCL Tech",
+    companyLogoPath: "/experience/hcltech.png",
+    logoContainerClassName: "bg-white",
+    designation: "Full Stack Engineer",
     jobType: "Full Time",
-    jobLocation: "Remote",
-    period: "Aug 2020 – Dec 2021",
+    jobLocation: "Noida, India",
+    period: "Jan 2021 - 2026",
     expPoints: [
-      "Developed reusable UI components with React and Storybook, reducing code duplication.",
-      "Implemented state management using Redux Toolkit and Context API for complex workflows.",
-      "Worked closely with backend engineers to integrate APIs securely with authentication flows (OAuth, JWT).",
-    ],
-        tech: [
-      {
-        name: "Next.js",
-        icon: "/icons/next-js.svg",
-        width: 68,
-      },
-      {
-        name: "Node.js",
-        icon: "/icons/nodejs-icon.svg",
-        width: 72,
-      },
-      {
-        name: "PostgreSQL",
-        icon: "/icons/postgresql.svg",
-        width: 96,
-      },
-    ],
-  },
-  {
-    companyName: "Tesla",
-    companyLogoPath: "/experience/tesla.svg",
-    designation: "Junior Frontend Developer",
-    jobType: "Contract",
-    jobLocation: "Remote",
-    period: "Jun 2018 – Jun 2020",
-    expPoints: [
-      "Migrated legacy jQuery applications to React.js, improving maintainability.",
-      "Learned and applied Agile methodology, participating in sprint planning and reviews.",
-      "Implemented form validations, authentication flows, and role-based access control.",
-    ],
-       tech: [
-      {
-        name: "Next.js",
-        icon: "/icons/next-js.svg",
-        width: 68,
-      },
-      {
-        name: "Golang",
-        icon: "/icons/golang-1.svg",
-        width: 70,
-      },
-      {
-        name: "PostgreSQL",
-        icon: "/icons/postgresql.svg",
-        width: 96,
-      },
-    ],
-  },
-    {
-    companyName: "Amazon",
-    companyLogoPath: "/experience/amazon.svg",
-    designation: "Junior Frontend Developer",
-    jobType: "Internship",
-    jobLocation: "Pune, India",
-    period: "Nov 2017 – Feb 2018",
-    expPoints: [
-      "Developed and maintained client-facing dashboards with React, Redux Toolkit, and TypeScript.",
-      "Contributed to UI testing with Jest and React Testing Library.",
-    ],
-        tech: [
-      {
-        name: "React",
-        icon: "/icons/react.svg",
-        width: 66,
-      },
-      {
-        name: "Next.js",
-        icon: "/icons/next-js.svg",
-        width: 68,
-      },
-      {
-        name: "Tailwind",
-        icon: "/icons/tailwind.svg",
-        width: 76,
-      },
+      " Improved client applications’ SEO performance by 25% and organic traffic by 18% through Next.js server side rendering and Core Web Vitals optimizations.",
+      "Added data caching with TanStack Query to improve response times for repeated requests.",
+      " Delivered features across frontend and backend services, collaborating with cross-functional teams to meet diverse client requirements in Agile sprints",
+      " Developed RESTful APIs using Node.js (Express.js) with PostgreSQL and Prisma ORM.",
     ],
   },
 ];
@@ -256,6 +172,9 @@ export const ABOUT_IMAGES = [
   "/about/about5.webp",
   "/about/about6.webp",
   "/about/about7.webp",
+  "/about/about8.webp",
+  "/about/about9.webp",
+  "/about/about10.webp",
 ];
 
 export const BLOGS = [
@@ -349,67 +268,67 @@ export const ACHIVEMENTSTIMELINE = [
   },
 ];
 
-
 export const TESTIMONIALS = [
   {
-    content: "Working with Lokesh was a great experience. He delivered a clean, scalable frontend architecture and made the UI feel seamless and intuitive.",
+    content:
+      "Working with Lokesh was a great experience. He delivered a clean, scalable frontend architecture and made the UI feel seamless and intuitive.",
     name: "Ananya Sharma",
     designation: "Product Manager, FinTech Startup",
-    avatarPath:"/testimonial/ananya.jpg"
+    avatarPath: "/testimonial/ananya.jpg",
   },
   {
-    content: "Lokesh’s attention to detail in React and Next.js projects really impressed us. He optimized performance and improved our web app’s user experience drastically.",
+    content:
+      "Lokesh’s attention to detail in React and Next.js projects really impressed us. He optimized performance and improved our web app’s user experience drastically.",
     name: "Sophie Williams",
     designation: "CTO, Creative Agency",
-    avatarPath:"/testimonial/sophie.jpg"
+    avatarPath: "/testimonial/sophie.jpg",
   },
   {
-    content: "He has a strong problem-solving mindset and quickly adapts to new technologies. Our backend APIs and frontend integration were smoother than ever.",
+    content:
+      "He has a strong problem-solving mindset and quickly adapts to new technologies. Our backend APIs and frontend integration were smoother than ever.",
     name: "Rahul Mehta",
     designation: "Software Architect, SaaS Company",
-    avatarPath:"/testimonial/rahul.jpg"
+    avatarPath: "/testimonial/rahul.jpg",
   },
   {
-    content: "Lokesh not only wrote efficient code but also guided our team in implementing best practices. His collaborative approach made the project a success.",
+    content:
+      "Lokesh not only wrote efficient code but also guided our team in implementing best practices. His collaborative approach made the project a success.",
     name: "Arjun Patel",
     designation: "Team Lead, E-commerce Platform",
-    avatarPath:"/testimonial/arjun.jpg"
+    avatarPath: "/testimonial/arjun.jpg",
   },
   {
-    content: "A reliable engineer with a knack for delivering on time. The web application he built for us was robust, fast, and scalable.",
+    content:
+      "A reliable engineer with a knack for delivering on time. The web application he built for us was robust, fast, and scalable.",
     name: "David Johnson",
     designation: "Founder, Startup Inc.",
-    avatarPath:"/testimonial/david.jpg"
-  }
+    avatarPath: "/testimonial/david.jpg",
+  },
 ];
 
-
-export const SOCIALS=[
+export const SOCIALS = [
   {
-    name:"X",
-    href:"https://x.com/singh_loke28577",
-    icon:IconBrandX
-
+    name: "X",
+    href: "https://x.com/ShipItLokesh",
+    icon: IconBrandX,
   },
-    {
-    name:"Github",
-    href:"https://github.com/LokeshXs/Minimal-Portfolio-Template",
-    icon:IconBrandGithub
-
+  {
+    name: "Github",
+    href: "https://github.com/LokeshXs",
+    icon: IconBrandGithub,
   },
-    {
-    name:"Linked in",
-    href:"https://www.linkedin.com/in/lokeshsingh1129/",
-    icon:IconBrandLinkedin
-
+  {
+    name: "Linked in",
+    href: "https://www.linkedin.com/in/lokeshsingh1129/",
+    icon: IconBrandLinkedin,
   },
-]
+];
 
-export const GITHUB_USERNAME="LokeshXs"
+export const GITHUB_USERNAME = "LokeshXs";
 
-export const GITHUB_SHOWCASE_REPOS=[
+export const GITHUB_SHOWCASE_REPOS = [
   "url-shortener",
   "Minimal-Portfolio-Template",
   "1BeatClub-V2.0",
-  "FilmStash"
-]
+  "FilmStash",
+];

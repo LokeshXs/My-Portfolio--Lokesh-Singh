@@ -8,7 +8,7 @@ import { PROJECTS } from "@/lib/data";
 import { motion } from "motion/react";
 
 const PROJECTS_DESCRIPTION =
-  "Here you’ll find a collection of the work I’ve built as a software engineer specializing in web development. Each project highlights different aspects of my skills — from crafting seamless user interfaces and responsive designs to developing scalable backend systems and integrating modern tools & APIs.";
+  "Here you’ll find a collection of the best magics i did using my skills";
 export default function Page() {
   return (
     <Container className="relative min-h-screen overflow-x-hidden">
@@ -67,7 +67,10 @@ export default function Page() {
                 }}
                 key={`project-${idx}`}
               >
-                <ProjectCard project={project} />
+                <ProjectCard
+                  project={project}
+                  className="h-full"
+                />
               </motion.div>
             ))}
           </div>

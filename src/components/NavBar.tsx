@@ -10,18 +10,28 @@ import Image from "next/image";
 import Container from "./Container";
 import { NAV_LINKS } from "@/lib/data";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { IconHome, IconMoon, IconSun } from "@tabler/icons-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useTheme } from "next-themes";
+import { IconBrandGithub } from "@tabler/icons-react";
+import {
+  FolderOpenIcon,
+  type FolderOpenIconHandle,
+  UserRoundIcon,
+  type UserRoundIconHandle,
+} from "@animateicons/react/lucide";
 
 export default function NavBar() {
   const [hovered, setHovered] = useState<number | null>(null);
+  const aboutIconRef = useRef<UserRoundIconHandle>(null);
+  const projectsIconRef = useRef<FolderOpenIconHandle>(null);
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState<boolean>(false);
   const pathName = usePathname();
+  const showAvatar = pathName !== "/" || scrolled;
   const router = useRouter();
   const { setTheme, theme } = useTheme();
 
@@ -34,66 +44,121 @@ export default function NavBar() {
   });
 
   return (
-    <Container className="fixed inset-x-0 top-0 z-10 bg-transparent px-4 py-4 md:px-14 dark:bg-transparent ">
+    <Container className="fixed inset-x-0 top-0 z-10 flex items-center justify-between bg-transparent px-4 py-4 md:px-12 dark:bg-transparent">
       <motion.nav
-  
         animate={{
           width: scrolled ? "90%" : "100%",
           boxShadow: scrolled ? "var(--shadow-custom)" : "none",
-          paddingLeft: scrolled ? "6px" : "0px",
-          paddingRight: scrolled ? "6px" : "0px",
-          paddingTop: scrolled ? "4px" : "0px",
-          paddingBottom: scrolled ? "4px" : "0px",
+          paddingLeft: scrolled ? "8px" : "6px",
+          paddingRight: scrolled ? "8px" : "6px",
+          paddingTop: scrolled ? "8px" : "6px",
+          paddingBottom: scrolled ? "8px" : "6px",
         }}
         transition={{
           duration: 0.3,
-          ease: "easeInOut",
+          ease: "linear",
         }}
-        className="relative mx-auto flex items-center justify-between gap-6 overflow-hidden rounded-full bg-white/80 backdrop-blur-lg dark:bg-neutral-900/80"
+        className="relative mx-auto flex items-center justify-between gap-6 overflow-hidden rounded-full bg-white/80 backdrop-blur-sm dark:bg-neutral-900/80"
       >
-        <AnimatePresence>
-          {pathName !== "/" ? (
-            <motion.div
-              key="home"
-              title="Home"
-              className="group relative flex cursor-pointer items-center justify-center overflow-hidden rounded-full bg-neutral-100 p-4 dark:bg-neutral-700"
-              initial={{
-                opacity: 0,
-                scale: 0.8,
-              }}
-              animate={{
-                padding: scrolled ? "12px" : "16px",
-                opacity: 1,
-                scale: 1,
-              }}
-              onClick={() => router.push("/")}
-            >
-              <IconHome className="text-neutral-700 transition-all duration-300 group-hover:scale-105 group-hover:text-neutral-900 dark:text-neutral-200" />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="profile"
-              initial={{
-                opacity: 0,
-                scale: 0.8,
-              }}
-              animate={{
-                width: scrolled ? "3rem" : "3.5rem",
-                height: scrolled ? "3rem" : "3.5rem",
-                opacity: 1,
-                scale: 1,
-              }}
-              className="relative h-14 w-14 overflow-hidden rounded-full"
-            >
-              <Image
-                src="/me.jpg"
-                alt="Lokesh Singh"
-                fill
-                className="object-cover object-center"
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <motion.div
+          animate={{ paddingLeft: showAvatar ? 50 : 0 }}
+          transition={{
+            duration: 0.25,
+            delay: showAvatar ? 0 : 0.2,
+            ease: "linear",
+          }}
+          className="relative flex shrink-0 items-center"
+        >
+          <AnimatePresence>
+            {showAvatar && (
+              <motion.div
+                key="avatar"
+                initial={{ opacity: 0, scale: 0.65 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.65 }}
+                transition={{
+                  duration: 0.2,
+                  delay: showAvatar ? 0.25 : 0,
+                  ease: "linear",
+                }}
+                className="absolute inset-y-0 left-1 flex items-center"
+              >
+                <Link
+                  href="/"
+                  aria-label="Go to home page"
+                  className="relative h-10 w-10 overflow-hidden rounded-full"
+                >
+                  <Image
+                    src="/me.jpg"
+                    alt="Lokesh Singh"
+                    fill
+                    className="object-cover object-center"
+                  />
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <motion.ul
+            initial={{ opacity: 0, y: -40, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{
+              duration: 0.3,
+              delay: 0.3,
+            }}
+            className="text-primary-foreground/80 flex items-center text-base"
+          >
+            {NAV_LINKS.map((linkObj, idx) => (
+              <li key={`link-${idx}`}>
+                <Link
+                  href={linkObj.href}
+                  onMouseEnter={() => {
+                    setHovered(idx);
+                    if (linkObj.title === "About") {
+                      aboutIconRef.current?.startAnimation();
+                    } else {
+                      projectsIconRef.current?.startAnimation();
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    setHovered(null);
+                    if (linkObj.title === "About") {
+                      aboutIconRef.current?.stopAnimation();
+                    } else {
+                      projectsIconRef.current?.stopAnimation();
+                    }
+                  }}
+                  className="hover:text-primary-foreground relative inline-flex items-center justify-center rounded-md px-2 py-1 transition-colors duration-300"
+                >
+                  <span className="relative z-[2] inline-flex items-center gap-1.5">
+                    {linkObj.title === "About" ? (
+                      <UserRoundIcon
+                        ref={aboutIconRef}
+                        size={16}
+                        isAnimated={false}
+                        className="shrink-0"
+                      />
+                    ) : (
+                      <FolderOpenIcon
+                        ref={projectsIconRef}
+                        size={16}
+                        isAnimated={false}
+                        className="shrink-0"
+                      />
+                    )}
+                    {linkObj.title}
+                  </span>
+                  {hovered === idx && (
+                    <motion.span
+                      layoutId="hovered-span"
+                      className="pointer-events-none absolute inset-0 z-0 rounded-md bg-neutral-100 dark:bg-neutral-800 border-1 border-neutral-200/40"
+                    />
+                  )}
+                </Link>
+              </li>
+            ))}
+          </motion.ul>
+        </motion.div>
 
         <motion.ul
           initial={{ opacity: 0, y: -40, filter: "blur(10px)" }}
@@ -102,26 +167,24 @@ export default function NavBar() {
             duration: 0.3,
             delay: 0.3,
           }}
-          className="text-primary-foreground/80 flex items-center text-sm"
+          className="text-primary-foreground/80 flex items-center gap-2 text-sm"
         >
-          {NAV_LINKS.map((linkObj, idx) => (
-            <li key={`link-${idx}`}>
-              <Link
-                href={linkObj.href}
-                onMouseEnter={() => setHovered(idx)}
-                onMouseLeave={() => setHovered(null)}
-                className="hover:text-primary-foreground relative px-2 py-1 transition-all duration-300"
-              >
-                <span className="relative z-[2]"> {linkObj.title}</span>
-                {hovered === idx && (
-                  <motion.span
-                    layoutId="hovered-span"
-                    className="absolute inset-0 z-0 h-full w-full rounded-md bg-neutral-100 dark:bg-neutral-800"
-                  />
-                )}
-              </Link>
-            </li>
-          ))}
+          
+
+          <Link
+            href="https://buymeacoffee.com/lokesh1129m"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:bg-transparent dark:hover:bg-transparent"
+          >
+            <Image
+              alt="Buy Me Coffee"
+              width={40}
+              height={40}
+              src="/buy_me_coffee.png"
+              className="rotate-6 object-contain transition-transform duration-300 hover:rotate-0"
+            />
+          </Link>
 
           <Button
             onClick={() => {

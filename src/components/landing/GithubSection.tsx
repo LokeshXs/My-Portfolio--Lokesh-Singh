@@ -6,7 +6,7 @@ export default async function GithubSection() {
   return (
     <div className="px-4 py-8 max-sm:px-2 max-sm:py-6">
       <div className="flex justify-center">
-        <AnimatedSubheading subheading="GitHub Highlights" />
+        <AnimatedSubheading subheading="GitHub Activity" />
       </div>
 
       <div className="py-6">

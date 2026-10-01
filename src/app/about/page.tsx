@@ -9,7 +9,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 
 const ABOUT_DESCRIPTION =
-  "My journey into tech started with curiosity about how websites work, and over time it grew into a career where I get to design and develop applications that make an impact.";
+  "Talking about myself is always a little difficult, but I’m someone who values balance. I enjoy taking care of my health, exploring new places, and hope to visit New Zealand someday 🫶. Professionally, I began as a full-stack developer, but my growing interest in the visual side of products naturally led me toward frontend development.";
 
 export default function Page() {
   const variants = {
@@ -100,7 +100,7 @@ export default function Page() {
           </div>
          </div>
         </div>
-        <div className="mx-auto block h-[2px] w-full bg-muted" />
+        {/* <div className="mx-auto block h-[2px] w-full bg-muted" />
         <div className="py-8 max-sm:py-6 px-4 max-sm:px-2">
           <div className="flex justify-center">
             <AnimatedSubheading subheading="Timeline of achivements" />
@@ -110,7 +110,7 @@ export default function Page() {
               <TimelineBlock key={`achivement-${idx}`} achivement={item} index={idx} />
             ))}
           </div>
-        </div>
+        </div> */}
         <div className="absolute top-0 left-0 col-start-2 row-span-full row-start-1 h-full w-10 max-md:w-6 border-x border-x-(--pattern-fg) bg-[image:repeating-linear-gradient(315deg,_var(--pattern-fg)_0,_var(--pattern-fg)_1px,_transparent_0,_transparent_50%)] bg-[size:10px_10px] bg-fixed"></div>
         <div className="absolute top-0 right-0 col-start-2 row-span-full row-start-1 h-full w-10  max-md:w-6 border-x border-x-(--pattern-fg) bg-[image:repeating-linear-gradient(315deg,_var(--pattern-fg)_0,_var(--pattern-fg)_1px,_transparent_0,_transparent_50%)] bg-[size:10px_10px] bg-fixed"></div>
     </Container>

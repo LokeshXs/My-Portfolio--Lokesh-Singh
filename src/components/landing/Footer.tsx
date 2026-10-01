@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <div className="flex items-center justify-between px-4 py-4">
-      <p className="text-secondary text-sm">Built by Lokesh Singh</p>
+      <p className="text-secondary text-sm">Built by <Link target="_blank" href={SOCIALS[0].href} className=" underline">Lokesh Singh</Link></p>
 
       <div className="flex items-center gap-2">
         {SOCIALS.map((social, idx) => (

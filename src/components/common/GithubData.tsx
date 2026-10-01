@@ -25,7 +25,7 @@ export default async function GithubData() {
   return (
     <div>
       <GithubContributionsGrid weeks={contributionsResponse.data} />
-      <GithubRepos githubReposData={repositoryDataResponse.data}/>
+      {/* <GithubRepos githubReposData={repositoryDataResponse.data}/> */}
     </div>
   );
 }

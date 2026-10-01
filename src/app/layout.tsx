@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata, SEO_NAME, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/seo";
 import {  Rubik } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
@@ -14,45 +15,12 @@ const rubik = Rubik({
 });
 
 export const metadata: Metadata = {
-  title: "Lokesh | Software Engineer & Web Developer Portfolio",
-  description:
-    "Portfolio of Lokesh, a software engineer specializing in modern web development with React, Next.js, Node.js, and PostgreSQL. Explore projects, blogs, and experience.",
-  keywords: [
-    "Lokesh",
-    "Software Engineer",
-    "Web Developer",
-    "React Developer",
-    "Next.js",
-    "Full Stack Developer",
-    "Portfolio",
-    "Frontend Engineer",
-    "MERN Stack",
-  ],
-  metadataBase:new URL('https://minimal-portfolio-template-by-lokesh.vercel.app/'),
-  openGraph: {
-    title: "Lokesh | Software Engineer & Web Developer Portfolio",
-    description:
-      "Showcasing projects, blogs, and experience in building scalable web applications using React, Next.js, Node.js, and PostgreSQL.",
-    url: "/",
-    siteName: "Lokesh Portfolio",
-    images: [
-      {
-        url: "/showcard.png",
-        width: 1200,
-        height: 630,
-        alt: "Lokesh Portfolio Preview",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Lokesh | Software Engineer & Web Developer Portfolio",
-    description:
-      "Portfolio of Lokesh, showcasing projects, blogs, and experience in web development.",
-    images: ["/showcard.png"],
-  },
+  ...pageMetadata(SITE_TITLE, SITE_DESCRIPTION, "/"),
+  metadataBase: SITE_URL,
+  applicationName: SITE_TITLE,
+  authors: [{ name: SEO_NAME, url: SITE_URL.href }],
+  creator: SEO_NAME,
+  keywords: [SEO_NAME, "AI Design Engineer", "Design Engineer", "User Experience", "Frontend Development", "Full Stack Development", "Portfolio"],
 };
 
 export default function RootLayout({
