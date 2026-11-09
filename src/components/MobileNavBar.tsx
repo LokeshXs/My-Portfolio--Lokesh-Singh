@@ -12,11 +12,11 @@ import { NAV_LINKS } from "@/lib/data";
 
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { IconHome, IconMoon, IconSun } from "@tabler/icons-react";
+import { IconHome } from "@tabler/icons-react";
 import { IconBrandGithub } from "@tabler/icons-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { useTheme } from "next-themes";
+import ThemeToggle from "./ThemeToggle";
 import MobileNavContextProvider from "@/context/MobileNavContextProvider";
 import AnimatedHamburgerButton from "./ui/MobileNavToggleButton";
 import MobileNavToggleButton from "./ui/MobileNavToggleButton";
@@ -28,7 +28,6 @@ export default function MobileNavBar() {
 
   const pathName = usePathname();
   const router = useRouter();
-  const { setTheme, theme } = useTheme();
 
 
 
@@ -91,40 +90,7 @@ export default function MobileNavBar() {
             }}
             className="text-primary-foreground/80 flex items-center gap-1 text-sm"
           >
-            <Button
-              onClick={() => {
-                if (theme === "light") {
-                  setTheme("dark");
-                } else {
-                  setTheme("light");
-                }
-              }}
-              className="h-8 w-8 cursor-pointer rounded-full [&_svg:not([class*='size-'])]:size-4"
-              variant="ghost"
-              title={theme === "light" ? "Dark mode" : "Light Mode"}
-            >
-              <AnimatePresence mode="wait">
-                {theme === "light" ? (
-                  <motion.span
-                    key="darkmode"
-                    initial={{ opacity: 0, rotate: 180 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: 180 }}
-                  >
-                    <IconMoon />
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="lightmode"
-                    initial={{ opacity: 0, rotate: 180 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: 180 }}
-                  >
-                    <IconSun />
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </Button>
+            <ThemeToggle />
 
             <Button
               asChild

@@ -5,7 +5,7 @@ export const SITE_URL = new URL(
   process.env.NEXT_PUBLIC_SITE_URL || "https://minimal-portfolio-template-by-lokesh.vercel.app/",
 );
 export const SEO_NAME = NAME.replace(/👋/gu, "").trim();
-export const SITE_TITLE = SEO_NAME + " | AI Design Engineer";
+export const SITE_TITLE = SEO_NAME + " | AI Full Stack Engineer";
 export const SITE_DESCRIPTION = DESCRIPTION;
 
 const socialImage = {
@@ -51,7 +51,7 @@ export const personStructuredData = {
   name: SEO_NAME,
   url: SITE_URL.href,
   image: new URL("/avatar.jpg", SITE_URL).href,
-  jobTitle: "AI Design Engineer",
+  jobTitle: "AI Full Stack Engineer",
   description: SITE_DESCRIPTION,
   sameAs: SOCIALS.map((social) => social.href),
 };

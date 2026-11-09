@@ -6,7 +6,7 @@ import {
 
 export const NAME = "Lokesh Singh 👋";
 export const DESCRIPTION =
-  "I’m an AI Design Engineer crafting thoughtful user experiences by combining design expertise with the power of AI tools.";
+  "Full stack by trade, designer at heart, AI-curious by default. I build products that are fast under the hood and delightful on the surface";
 
 export const NAV_LINKS = [
   {

@@ -8,6 +8,7 @@ import Footer from "@/components/landing/Footer";
 import Container from "@/components/Container";
 import { Toaster } from "sonner";
 import MobileNavBar from "@/components/MobileNavBar";
+import ChatWidget from "@/components/chat/ChatWidget";
 
 const rubik = Rubik({
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
   applicationName: SITE_TITLE,
   authors: [{ name: SEO_NAME, url: SITE_URL.href }],
   creator: SEO_NAME,
-  keywords: [SEO_NAME, "AI Design Engineer", "Design Engineer", "User Experience", "Frontend Development", "Full Stack Development", "Portfolio"],
+  keywords: [SEO_NAME, "AI Full Stack Engineer", "Full Stack Engineer", "Design Engineer", "AI Engineer", "Next.js Developer", "Full Stack Development", "Portfolio"],
 };
 
 export default function RootLayout({
@@ -29,7 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="light">
+    // suppressHydrationWarning: next-themes sets the theme class/style on <html> before React loads (expected).
+    <html lang="en" className="light" suppressHydrationWarning>
       <body
         className={`${rubik.className} bg-neutral-100 antialiased [--pattern-fg:var(--color-gray-950)]/5 dark:bg-black dark:[--pattern-fg:var(--color-white)]/10`}
       >
@@ -53,6 +55,7 @@ export default function RootLayout({
               <Footer />
             </div>
           </Container>
+          <ChatWidget />
         </ThemeProvider>
         <Toaster position="top-center" closeButton  richColors />
       </body>
