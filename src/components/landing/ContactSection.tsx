@@ -7,11 +7,9 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { SOCIALS } from "@/lib/data";
+import { EMAIL_ADDRESS, GITHUB_URL, LINKEDIN_URL, SCHEDULE_CALL_URL, X_URL } from "@/lib/links";
 import AnimatedSubheading from "../common/AnimatedSubHeading";
 
-const EMAIL_ADDRESS = "hi@lokeshbuilds.in";
-const SCHEDULE_CALL_URL = "https://cal.com/lokesh1129/meeting";
-const X_URL = "https://x.com/ShipItLokesh";
 const githubSocial = SOCIALS.find((social) => social.name === "Github");
 
 const contactLinks = [
@@ -23,13 +21,13 @@ const contactLinks = [
   },
   {
     label: "View my GitHub profile",
-    href: githubSocial?.href ?? "https://github.com/LokeshXs",
+    href: GITHUB_URL,
     icon: githubSocial?.icon ?? IconBrandGithub,
     external: true,
   },
   {
     label: "Connect on LinkedIn",
-    href: "https://www.linkedin.com/in/lokeshsingh1129",
+    href: LINKEDIN_URL,
     icon: IconBrandLinkedin,
     external: true,
   },

@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import HeroAvatar from "./HeroAvatar";
+import { emitByteEvent } from "@/components/mascot/byteStore";
+import { EMAIL_ADDRESS, RESUME_URL, SCHEDULE_CALL_URL } from "@/lib/links";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { toast } from "sonner";
@@ -17,7 +19,7 @@ import {
 import { DESCRIPTION, NAME } from "@/lib/data";
 import { Button } from "../ui/button";
 
-const emailAddress = "hi@lokeshbuilds.in";
+const emailAddress = EMAIL_ADDRESS;
 
 export default function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -72,6 +74,7 @@ export default function HeroSection() {
         copyResetTimer.current = null;
       }, 500);
       toast.success("Email copied to clipboard");
+      emitByteEvent({ type: "email-copied" }); // Byte reacts with heart eyes
     } catch {
       toast.error("Could not copy email. Please copy it manually.");
     }
@@ -218,7 +221,7 @@ export default function HeroSection() {
               className="size-1 shrink-0 rounded-full bg-muted-foreground"
             />
             <Link
-              href="https://cal.com/lokesh1129/meeting"
+              href={SCHEDULE_CALL_URL}
               target="_blank"
               rel="noopener noreferrer"
               onMouseEnter={() => {
@@ -252,7 +255,7 @@ export default function HeroSection() {
               className="size-1 shrink-0 rounded-full bg-muted-foreground"
             />
             <Link
-              href="/Lokesh_resume.pdf"
+              href={RESUME_URL}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Open resume PDF in a new tab"
@@ -277,15 +280,8 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
-      <div className="relative size-28 shrink-0 overflow-hidden rounded-full sm:size-32 md:size-40 md:-translate-x-12">
-        <Image
-          fill
-          priority
-          alt="Lokesh Profile Image"
-          src="/me.jpg"
-          className="object-cover"
-        />
-      </div>
+      {/* Profile photo + mini Byte badge (click the badge to swap them). */}
+      <HeroAvatar />
     </div>
   );
 }

@@ -1,0 +1,221 @@
+/*
+  Mascot animations (Milestone 2.5).
+
+  Two layers:
+  - "motion_*"  moves the whole face (the <g> group): hop, bounce, heartbeat, sink…
+  - "px_*"      animates each pixel's colour/brightness, with per-pixel delays
+                from CSS variables --col (column) and --seed (pseudo-random 0..1).
+
+  Units: inside an SVG, 1px = 1 grid cell. So translateY(-1px) = "up one pixel".
+  We only animate fill / fill-opacity on pixels — never opacity, because opacity
+  is what turns pixels on and off.
+*/
+
+.face {
+  transform-box: fill-box;
+  transform-origin: center;
+  /* Flash colour for sparkles / the colour wave: darker on the white (light theme) face,
+     lighter on the black (dark theme) face — so it always stands out. */
+  --flash: #9a3412;
+}
+:global(.dark) .face {
+  --flash: #fdba74;
+}
+
+.px {
+  transition: opacity 100ms ease, fill 200ms ease;
+}
+
+/* ───────── idle: slow breathing + gentle dimming ───────── */
+.motion_idle {
+  animation: breathe 3.2s ease-in-out infinite;
+}
+.px_idle {
+  animation: dim 3.2s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-0.25px); }
+}
+@keyframes dim {
+  0%, 100% { fill-opacity: 1; }
+  50% { fill-opacity: 0.85; }
+}
+
+/* ───────── happy: two quick hops + random sparkles ───────── */
+.motion_happy {
+  animation: hop 1.5s ease-out infinite;
+}
+.px_happy {
+  animation: sparkle 6s linear infinite;
+  animation-delay: calc(var(--seed) * -6s);
+}
+@keyframes hop {
+  0%, 45%, 100% { transform: translateY(0); }
+  10% { transform: translateY(-1px); }
+  20% { transform: translateY(0); }
+  28% { transform: translateY(-0.6px); }
+  36% { transform: translateY(0); }
+}
+@keyframes sparkle {
+  0%, 93%, 100% { fill: #ea580c; }
+  96% { fill: var(--flash); }
+}
+
+/* ───────── excited: fast bounce + shake + colour wave left→right ───────── */
+.motion_excited {
+  animation: bounce 0.45s ease-in-out infinite;
+}
+.px_excited {
+  animation: wave 0.9s ease-in-out infinite;
+  animation-delay: calc(var(--col) * 70ms);
+}
+@keyframes bounce {
+  0%, 50%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-0.3px, -1px); }
+  75% { transform: translate(0.3px, -1px); }
+}
+@keyframes wave {
+  0%, 100% { fill: #ea580c; }
+  50% { fill: var(--flash); }
+}
+
+/* ───────── thinking: eyes look up-left ↔ up-right + LED flicker ───────── */
+.motion_thinking {
+  animation: search 2.4s ease-in-out infinite;
+}
+.px_thinking {
+  animation: flicker 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--seed) * -1.4s);
+}
+@keyframes search {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-1px); }
+}
+@keyframes flicker {
+  0%, 100% { fill-opacity: 1; }
+  50% { fill-opacity: 0.4; }
+}
+
+/* ───────── heart: lub-dub heartbeat with a glow on each beat ───────── */
+.motion_heart {
+  animation: heartbeat 1.1s ease-in-out infinite;
+}
+@keyframes heartbeat {
+  0%, 60%, 100% { transform: scale(1); filter: none; }
+  15% { transform: scale(1.12); filter: drop-shadow(0 0 0.6px rgba(255, 106, 61, 0.9)); }
+  30% { transform: scale(1); filter: none; }
+  45% { transform: scale(1.07); filter: drop-shadow(0 0 0.4px rgba(255, 106, 61, 0.7)); }
+}
+
+/* ───────── sad: eyes sink a little and stay, dimmed, with a falling tear ───────── */
+.motion_sad {
+  animation: sink 0.8s ease-out forwards;
+}
+.px_sad {
+  fill-opacity: 0.7;
+}
+.tear {
+  animation: tear 1.8s ease-in infinite;
+}
+@keyframes sink {
+  from { transform: translateY(0); }
+  to { transform: translateY(0.5px); }
+}
+@keyframes tear {
+  0% { transform: translateY(0); fill-opacity: 0.9; }
+  70% { fill-opacity: 0.6; }
+  100% { transform: translateY(1.4px); fill-opacity: 0; }
+}
+
+/* ───────── sleep: very slow breathing, dimmed ───────── */
+.motion_sleep {
+  animation: breathe 4.5s ease-in-out infinite;
+}
+.px_sleep {
+  fill-opacity: 0.75;
+}
+
+/* ───────── surprised: one startled jump ───────── */
+.motion_surprised {
+  animation: startle 0.5s ease-out 1;
+}
+@keyframes startle {
+  0% { transform: translateY(0); }
+  35% { transform: translateY(-1.2px); }
+  70% { transform: translateY(0.2px); }
+  100% { transform: translateY(0); }
+}
+
+/* ───────── cool (sunglasses): a relaxed little nod ───────── */
+.motion_cool {
+  animation: nod 1.6s ease-in-out infinite;
+}
+@keyframes nod {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(0.4px); }
+}
+
+/* ───────── wobble: the whole mascot rocks side to side (dizzy) ───────── */
+.wobble {
+  animation: wobble 0.5s ease-in-out infinite;
+}
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+/* ───────── Z z z: little pixel Zs float up while sleeping ───────── */
+.z {
+  animation: float-z 2.4s ease-out infinite;
+  opacity: 0;
+}
+/* --s = the mascot's size (set in Mascot.tsx), so the Zs travel the same distance at any size. */
+@keyframes float-z {
+  0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translate(calc(var(--s) * 0.35), calc(var(--s) * -0.75)) scale(1.15); opacity: 0; }
+}
+
+/* ───────── highlight: a light sweeps once around the ring (e.g. when the page loads) ───────── */
+.sweep {
+  animation: sweep 1.1s ease-in-out forwards;
+}
+@keyframes sweep {
+  0% { transform: rotate(0deg); opacity: 0; }
+  15% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: rotate(360deg); opacity: 0; }
+}
+
+/* ───────── terminal cursor (TerminalIcon): blinks on/off like a real terminal ───────── */
+.cursor {
+  animation: cursor-blink 1.1s steps(1) infinite;
+}
+@keyframes cursor-blink {
+  50% { opacity: 0; }
+}
+
+/* ───────── visitors who turned off animations: nothing moves ───────── */
+@media (prefers-reduced-motion: reduce) {
+  .face,
+  .px,
+  .tear {
+    animation: none !important;
+    transition: none !important;
+  }
+  .sweep {
+    display: none;
+  }
+  .cursor {
+    animation: none;
+  }
+  .wobble {
+    animation: none;
+  }
+  .z {
+    animation: none;
+    opacity: 1;
+  }
+}

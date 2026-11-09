@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^4.0.110",
+    "@ai-sdk/react": "^4.0.168",
     "@animateicons/react": "^0.5.0",
     "@hookform/resolvers": "^5.2.2",
     "@octokit/rest": "^22.0.0",
@@ -17,6 +19,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tabler/icons-react": "^3.34.1",
     "@tailwindcss/typography": "^0.5.16",
+    "ai": "^7.0.164",
     "axios": "^1.13.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -27,9 +30,11 @@
     "motion": "^12.23.12",
     "next": "15.5.9",
     "next-themes": "^0.4.6",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "^19.1.2",
+    "react-dom": "^19.1.2",
     "react-hook-form": "^7.62.0",
+    "react-markdown": "^10.1.0",
+    "resend": "^6.37.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "zod": "^4.1.9"

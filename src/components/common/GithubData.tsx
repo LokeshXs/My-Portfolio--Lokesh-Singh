@@ -11,21 +11,23 @@ export type githubResponseType = {
 }[];
 
 export default async function GithubData() {
-  const contributionsResponse = await fetchContributions();
-  const repositoryDataResponse = await fetchRepoData(GITHUB_SHOWCASE_REPOS);
+  // Both requests run at the same time.
+  const [contributionsResponse, repositoryDataResponse] = await Promise.all([
+    fetchContributions(),
+    fetchRepoData(GITHUB_SHOWCASE_REPOS),
+  ]);
 
-  if (!contributionsResponse.data || !repositoryDataResponse.data) {
-    return <div className=" flex justify-center items-center py-12">
-      <p className=" text-center max-sm:text-xs">Missing Credentials to fetch the data</p>
-    </div>;
-  }
-
-
-
+  // Each part shows on its own, so one failing doesn't hide the other.
   return (
     <div>
-      <GithubContributionsGrid weeks={contributionsResponse.data} />
-      {/* <GithubRepos githubReposData={repositoryDataResponse.data}/> */}
+      {contributionsResponse.data ? (
+        <GithubContributionsGrid weeks={contributionsResponse.data} />
+      ) : (
+        <p className="py-12 text-center text-sm text-muted-foreground max-sm:text-xs">
+          Couldn&apos;t load the contribution graph right now.
+        </p>
+      )}
+      {repositoryDataResponse.data && <GithubRepos githubReposData={repositoryDataResponse.data} />}
     </div>
   );
 }

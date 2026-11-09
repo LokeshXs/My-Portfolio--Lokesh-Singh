@@ -6,7 +6,7 @@ import {
 
 export const NAME = "Lokesh Singh 👋";
 export const DESCRIPTION =
-  "I’m an AI Design Engineer crafting thoughtful user experiences by combining design expertise with the power of AI tools.";
+  "Full stack by trade, designer at heart, AI-curious by default. I build products that are fast under the hood and delightful on the surface";
 
 export const NAV_LINKS = [
   {
@@ -326,9 +326,5 @@ export const SOCIALS = [
 
 export const GITHUB_USERNAME = "LokeshXs";
 
-export const GITHUB_SHOWCASE_REPOS = [
-  "url-shortener",
-  "Minimal-Portfolio-Template",
-  "1BeatClub-V2.0",
-  "FilmStash",
-];
+// Repos shown as cards in the GitHub section (exact current repo names on GitHub).
+export const GITHUB_SHOWCASE_REPOS = ["urlbit_url-shortener", "1BeatClub"];
