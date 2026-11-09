@@ -55,7 +55,8 @@ function RepoCard({
       key={repoData.name}
       href={repoData.url}
       target="_blank"
-      className="hover:shadow-custom flex w-full flex-col gap-6 max-sm:gap-4 rounded-md border p-2 transition-all duration-300"
+      rel="noopener noreferrer"
+      className="hover:shadow-custom flex h-full w-full flex-col gap-6 max-sm:gap-4 rounded-md border p-2 transition-all duration-300"
     >
       <div className="flex flex-col items-start gap-1">
         <p className=" max-sm:text-sm">
@@ -65,7 +66,8 @@ function RepoCard({
         <p className="text-muted-foreground text-xs">{repoData.description}</p>
       </div>
 
-      <div className="flex items-end justify-between gap-2">
+      {/* mt-auto pushes the stats to the bottom, so cards line up whatever the description length. */}
+      <div className="mt-auto flex items-end justify-between gap-2">
         <div className="flex flex-col items-start gap-2">
           <div className="flex items-center gap-4 max-sm:gap-2">
             <span className="flex items-center gap-1">

@@ -3,9 +3,17 @@
 // The browser sends the WHOLE conversation every time, because the AI has no memory.
 // We check it's safe and not too big, add the system prompt, and stream the answer back.
 
-import { streamText, convertToModelMessages, isStepCount, type UIMessage } from "ai";
+import {
+  streamText,
+  convertToModelMessages,
+  createUIMessageStream,
+  createUIMessageStreamResponse,
+  isStepCount,
+} from "ai";
 import { z } from "zod";
 import { CHAT_MODEL } from "@/lib/ai/model";
+import { pickMood } from "@/lib/ai/mood";
+import type { ChatUIMessage } from "@/lib/ai/types";
 import { SYSTEM_PROMPT } from "@/lib/ai/system-prompt";
 import { createTools } from "@/lib/ai/tools";
 import { DAY, MINUTE, getClientIp, rateLimit } from "@/lib/rate-limit";
@@ -29,6 +37,12 @@ const requestSchema = z.object({
     )
     .min(1),
 });
+
+/** The text of the visitor's latest message (used to pick the mascot's mood). */
+function lastVisitorText(messages: ChatUIMessage[]): string {
+  const last = messages.findLast((m) => m.role === "user");
+  return last?.parts.map((p) => (p.type === "text" ? p.text : "")).join(" ") ?? "";
+}
 
 export async function POST(request: Request) {
   // 1. Rate limit: is this visitor sending too much?
@@ -60,23 +74,43 @@ export async function POST(request: Request) {
       status: 400,
     });
   }
-  const messages = parsed.data.messages as unknown as UIMessage[];
+  const messages = parsed.data.messages as unknown as ChatUIMessage[];
+  const modelMessages = await convertToModelMessages(messages);
 
-  // 3. Ask the model. streamText = send the answer back piece by piece as it's written.
-  const result = streamText({
-    model: CHAT_MODEL,
-    instructions: SYSTEM_PROMPT,
-    // The browser's message format includes UI details; convert it to the format the model expects.
-    messages: await convertToModelMessages(messages),
-    // The tools the AI may use (built for this visitor, so email caps know who's asking).
-    tools: createTools({ ip }),
-    // By default the AI stops right after calling a tool. Allow a few "steps" so it can
-    // call the tool, read the result, and then write a reply like "Done, message sent!".
-    stopWhen: isStepCount(3),
-    // STEP 6: cap how long one answer can be (output tokens cost the most).
-    maxOutputTokens: 1000,
+  // 3. Build the response stream ourselves, so we can add the mascot's mood after the answer.
+  const stream = createUIMessageStream<ChatUIMessage>({
+    execute: async ({ writer }) => {
+      // 3a. Ask the model. streamText = the answer is written piece by piece.
+      const result = streamText({
+        model: CHAT_MODEL,
+        instructions: SYSTEM_PROMPT,
+        messages: modelMessages,
+        // The tools the AI may use (built for this visitor, so email caps know who's asking).
+        tools: createTools({ ip }),
+        // By default the AI stops right after calling a tool. Allow a few "steps" so it can
+        // call the tool, read the result, and then write a reply like "Done, message sent!".
+        stopWhen: isStepCount(4),
+        // STEP 6: cap how long one answer can be (output tokens cost the most).
+        maxOutputTokens: 1000,
+      });
+
+      // 3b. Pass every piece of the answer to the browser as it arrives.
+      //     (We hold back the "finish" signal until the mood is added.)
+      for await (const chunk of result.toUIMessageStream<ChatUIMessage>({ sendFinish: false })) {
+        writer.write(chunk);
+      }
+
+      // 3c. MILESTONE 5: a second, tiny AI call picks the mascot's mood for the reply.
+      //     `transient` = deliver it to the browser once, without saving it in the chat history.
+      const reply = await Promise.resolve(result.text).catch(() => ""); // "" if the answer failed
+      const mood = await pickMood({ visitorMessage: lastVisitorText(messages), reply });
+      if (mood) writer.write({ type: "data-mood", data: mood, transient: true });
+
+      // 3d. Now the reply is really finished.
+      writer.write({ type: "finish" });
+    },
   });
 
   // 4. Send the stream back in the format useChat (in the browser) understands.
-  return result.toUIMessageStreamResponse();
+  return createUIMessageStreamResponse({ stream });
 }

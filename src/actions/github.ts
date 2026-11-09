@@ -60,15 +60,11 @@ export async function fetchContributions() {
 export async function fetchRepoData(names: string[]) {
   try {
     const githubToken = process.env.GITHUB_ACCESS_TOKEN;
-    const githubUsername = GITHUB_USERNAME
+    const githubUsername = GITHUB_USERNAME;
 
-    if (!githubToken || !githubUsername) {
-      throw new Error("Github Credentials are missing");
-    }
-
-    const octokit = new Octokit({
-      auth: githubToken,
-    });
+    // These repos are public, so a token is optional here: without one GitHub still answers
+    // (with a lower rate limit). The contribution grid is what really needs the token.
+    const octokit = new Octokit(githubToken ? { auth: githubToken } : {});
 
     const reposData = names.map(async (name) => {
       const response = await octokit.request("GET /repos/{owner}/{repo}", {
@@ -116,7 +112,7 @@ export async function fetchRepoData(names: string[]) {
 
     return {
       status: "error",
-      message: "Github Credentials are missing",
+      message: "Could not load the GitHub repos",
     };
   }
 }

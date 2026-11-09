@@ -326,9 +326,5 @@ export const SOCIALS = [
 
 export const GITHUB_USERNAME = "LokeshXs";
 
-export const GITHUB_SHOWCASE_REPOS = [
-  "url-shortener",
-  "Minimal-Portfolio-Template",
-  "1BeatClub-V2.0",
-  "FilmStash",
-];
+// Repos shown as cards in the GitHub section (exact current repo names on GitHub).
+export const GITHUB_SHOWCASE_REPOS = ["urlbit_url-shortener", "1BeatClub"];
