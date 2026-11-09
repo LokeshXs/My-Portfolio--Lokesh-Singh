@@ -16,13 +16,14 @@ import { pickMood } from "@/lib/ai/mood";
 import type { ChatUIMessage } from "@/lib/ai/types";
 import { SYSTEM_PROMPT } from "@/lib/ai/system-prompt";
 import { createTools } from "@/lib/ai/tools";
-import { DAY, MINUTE, getClientIp, rateLimit } from "@/lib/rate-limit";
+import { DAY, MINUTE, checkRateLimit, formatDuration, getClientIp } from "@/lib/rate-limit";
 
 // STEP 6 — limits (tweak these numbers any time)
 const MAX_MESSAGES_PER_CHAT = 30; // longer chats cost more, because the whole history is re-sent
 const MAX_CHARS_PER_MESSAGE = 1000; // stops someone pasting a whole book
-const MAX_REQUESTS_PER_10_MIN = 20; // per visitor
-const MAX_REQUESTS_PER_DAY = 100; // per visitor
+const MAX_REQUESTS_PER_DAY = 20; // per visitor — the daily AI chat allowance
+const MAX_REQUESTS_PER_MINUTE = 8; // per visitor — stops rapid-fire spam / scripts
+const WARN_WHEN_LEFT = 5; // tell the visitor how many are left once it's this low
 
 // STEP 6 — what a valid request must look like. Anything else is rejected.
 const requestSchema = z.object({
@@ -44,16 +45,32 @@ function lastVisitorText(messages: ChatUIMessage[]): string {
   return last?.parts.map((p) => (p.type === "text" ? p.text : "")).join(" ") ?? "";
 }
 
+/** A 429 "limit reached" reply: a friendly message + the standard Retry-After header (seconds). */
+function limitReached(message: string, resetInMs: number) {
+  return new Response(message, {
+    status: 429,
+    headers: { "Retry-After": String(Math.ceil(resetInMs / 1000)) },
+  });
+}
+
 export async function POST(request: Request) {
-  // 1. Rate limit: is this visitor sending too much?
+  // 1. Rate limits: sending too fast, or over today's allowance?
+  //    The per-minute check comes first, so a "too fast" request doesn't use up a daily message.
   const ip = getClientIp(request);
-  if (
-    !rateLimit(`chat:${ip}`, MAX_REQUESTS_PER_10_MIN, 10 * MINUTE) ||
-    !rateLimit(`chat-day:${ip}`, MAX_REQUESTS_PER_DAY, DAY)
-  ) {
-    return new Response("You're sending messages too quickly. Please wait a few minutes.", {
-      status: 429,
-    });
+  const burst = checkRateLimit(`chat-burst:${ip}`, MAX_REQUESTS_PER_MINUTE, MINUTE);
+  if (!burst.allowed) {
+    return limitReached(
+      `Whoa, that's fast! Please wait ${formatDuration(burst.resetInMs)} before sending another message.`,
+      burst.resetInMs,
+    );
+  }
+  const daily = checkRateLimit(`chat-day:${ip}`, MAX_REQUESTS_PER_DAY, DAY);
+  if (!daily.allowed) {
+    return limitReached(
+      `You've used all ${MAX_REQUESTS_PER_DAY} of today's AI chat messages. ` +
+        `Your limit resets in ${formatDuration(daily.resetInMs)} ⏳`,
+      daily.resetInMs,
+    );
   }
 
   // 2. Check the request has the right shape and isn't too big.
@@ -80,6 +97,11 @@ export async function POST(request: Request) {
   // 3. Build the response stream ourselves, so we can add the mascot's mood after the answer.
   const stream = createUIMessageStream<ChatUIMessage>({
     execute: async ({ writer }) => {
+      // Running low on today's messages? Tell the chat (shown above the buttons, not saved in history).
+      if (daily.remaining <= WARN_WHEN_LEFT) {
+        writer.write({ type: "data-quota", data: { remaining: daily.remaining }, transient: true });
+      }
+
       // 3a. Ask the model. streamText = the answer is written piece by piece.
       const result = streamText({
         model: CHAT_MODEL,

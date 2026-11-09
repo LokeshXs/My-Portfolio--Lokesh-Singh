@@ -35,7 +35,11 @@ export function createTools({ ip }: { ip: string }) {
     // The inputs the AI must fill in. .describe() tells the AI what each field means.
     inputSchema: z.object({
       name: z.string().min(1).max(100).describe("The visitor's name"),
-      email: z.email().describe("The visitor's email address, so Lokesh can reply"),
+      // The HTML5 email pattern (same as <input type="email">). Zod's default pattern uses regex
+      // "lookaround", which OpenAI can't use in tool schemas (it would drop it with a warning).
+      email: z
+        .email({ pattern: z.regexes.html5Email })
+        .describe("The visitor's email address, so Lokesh can reply"),
       type: z
         .enum(["freelance", "full-time", "other"])
         .describe(

@@ -91,6 +91,7 @@ export default function ChatWidget() {
   }, [hideAutoTip]);
 
   const [aiMood, setAiMood] = useState<AiMood | null>(null);
+  const [messagesLeft, setMessagesLeft] = useState<number | null>(null); // only known once it's running low
 
   // Created once, shared by ChatBox and the mascot.
   const [chat] = useState(
@@ -102,6 +103,8 @@ export default function ChatWidget() {
           if (part.type === "data-mood") {
             setAiMood((prev) => ({ mood: part.data, id: (prev?.id ?? 0) + 1 }));
           }
+          // The server says how many AI messages are left today (only when it's running low).
+          if (part.type === "data-quota") setMessagesLeft(part.data.remaining);
         },
       }),
   );
@@ -169,7 +172,7 @@ export default function ChatWidget() {
         </div>
 
         <div className="min-h-0 flex-1">
-          <ChatBox chat={chat} onTypingChange={setTyping} onCardAction={onCardAction} />
+          <ChatBox chat={chat} onTypingChange={setTyping} onCardAction={onCardAction} messagesLeft={messagesLeft} />
         </div>
       </motion.div>
 
