@@ -13,6 +13,7 @@ import { IconSend2 } from "@tabler/icons-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ToolCard, { isShowToolPart } from "./cards/ToolCard";
+import ContactCard from "./cards/ContactCard";
 
 // One tap = one ready-made question (no typing needed).
 const QUICK_ACTIONS = [
@@ -46,9 +47,11 @@ type ChatBoxProps = {
   onTypingChange?: (typing: boolean) => void;
   /** Called when a visitor uses a card (download, open a link, copy) — Byte reacts. */
   onCardAction?: () => void;
+  /** AI messages left today (null = plenty left, so we don't mention it). */
+  messagesLeft?: number | null;
 };
 
-export default function ChatBox({ chat, onTypingChange, onCardAction }: ChatBoxProps) {
+export default function ChatBox({ chat, onTypingChange, onCardAction, messagesLeft = null }: ChatBoxProps) {
   const { messages, sendMessage, status, error } = useChat({ chat });
   const [input, setInput] = useState("");
   const [focused, setFocused] = useState(false);
@@ -61,6 +64,7 @@ export default function ChatBox({ chat, onTypingChange, onCardAction }: ChatBoxP
 
   // "submitted" = waiting for the first word, "streaming" = words are arriving
   const isBusy = status === "submitted" || status === "streaming";
+  const limitReached = !!error && "statusCode" in error && error.statusCode === 429;
 
   // Keep the newest message in view while the answer streams in.
   useEffect(() => {
@@ -97,30 +101,34 @@ export default function ChatBox({ chat, onTypingChange, onCardAction }: ChatBoxP
         )}
 
         {status === "submitted" && <p className="animate-pulse text-sm text-neutral-500">Thinking…</p>}
-        {error && (
-          <p className="text-sm text-red-500">
-            {/* 400/429 = our own friendly limit messages from /api/chat; anything else = generic. */}
-            {"statusCode" in error && (error.statusCode === 400 || error.statusCode === 429)
-              ? error.message
-              : "Something went wrong. Please try again."}
-          </p>
-        )}
+        {error && <ChatError error={error} onCardAction={onCardAction} />}
         <div ref={bottomRef} />
       </div>
 
-      {/* Quick actions — always available, scroll sideways on small screens */}
-      <div className="flex gap-1.5 overflow-x-auto border-t border-neutral-200 px-3 pt-2.5 [scrollbar-width:none] dark:border-neutral-800">
-        {QUICK_ACTIONS.map((action) => (
-          <button
-            key={action.label}
-            type="button"
-            onClick={() => send(action.ask)}
-            disabled={isBusy}
-            className="shrink-0 cursor-pointer rounded-full border border-neutral-200 px-2.5 py-1 text-xs whitespace-nowrap text-neutral-700 transition-colors hover:border-orange-500/60 hover:bg-orange-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-orange-950/30"
-          >
-            {action.label}
-          </button>
-        ))}
+      <div className="border-t border-neutral-200 pt-2 dark:border-neutral-800">
+        {/* Running low on today's AI messages → a gentle heads-up. */}
+        {messagesLeft !== null && !limitReached && (
+          <p className="px-4 pb-1.5 text-[11px] text-neutral-500">
+            {messagesLeft === 0
+              ? "💬 That was your last AI message for today."
+              : `💬 ${messagesLeft} AI message${messagesLeft === 1 ? "" : "s"} left today`}
+          </p>
+        )}
+
+        {/* Quick actions — always available, scroll sideways on small screens */}
+        <div className="flex gap-1.5 overflow-x-auto px-3 [scrollbar-width:none]">
+          {QUICK_ACTIONS.map((action) => (
+            <button
+              key={action.label}
+              type="button"
+              onClick={() => send(action.ask)}
+              disabled={isBusy}
+              className="shrink-0 cursor-pointer rounded-full border border-neutral-200 px-2.5 py-1 text-xs whitespace-nowrap text-neutral-700 transition-colors hover:border-orange-500/60 hover:bg-orange-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-orange-950/30"
+            >
+              {action.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Input */}
@@ -190,5 +198,29 @@ function AssistantMessage({ message, onCardAction }: { message: ChatUIMessage; o
         return null;
       })}
     </div>
+  );
+}
+
+/** Errors under the conversation. Hitting a limit gets a friendly notice + Lokesh's contact links. */
+function ChatError({ error, onCardAction }: { error: Error; onCardAction?: () => void }) {
+  const status = "statusCode" in error ? error.statusCode : undefined;
+
+  if (status === 429) {
+    return (
+      <div className="space-y-2">
+        <div className="rounded-xl border border-orange-200 bg-orange-50 px-3 py-2 text-sm text-orange-900 dark:border-orange-900/60 dark:bg-orange-950/30 dark:text-orange-200">
+          {error.message}
+        </div>
+        <p className="text-xs text-neutral-500">Meanwhile, you can reach Lokesh directly:</p>
+        <ContactCard links={["linkedin", "email", "schedule"]} onAction={onCardAction} />
+      </div>
+    );
+  }
+
+  return (
+    <p className="text-sm text-red-500">
+      {/* 400 = our own friendly messages from /api/chat (e.g. chat too long); anything else = generic. */}
+      {status === 400 ? error.message : "Something went wrong. Please try again."}
+    </p>
   );
 }

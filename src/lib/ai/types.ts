@@ -12,6 +12,7 @@ export type ChatTools = InferUITools<ReturnType<typeof createTools>>;
 
 /**
  * Our chat messages: text, tool parts (typed from ChatTools, so cards know their data), and one
- * extra kind of data part: `data-mood` — the mascot's mood for the reply.
+ * extra kinds of data parts: `data-mood` (the mascot's mood for the reply) and `data-quota`
+ * (how many AI messages the visitor has left today, sent only when it's running low).
  */
-export type ChatUIMessage = UIMessage<never, { mood: Mood }, ChatTools>;
+export type ChatUIMessage = UIMessage<never, { mood: Mood; quota: { remaining: number } }, ChatTools>;
